@@ -2,7 +2,6 @@ import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_contacts_example/util/avatar.dart';
-import 'package:pretty_json/pretty_json.dart';
 
 class ContactPage extends StatefulWidget {
   @override
@@ -11,11 +10,11 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends State<ContactPage>
     with AfterLayoutMixin<ContactPage> {
-  Contact _contact;
+  late Contact _contact;
 
   @override
   void afterFirstLayout(BuildContext context) {
-    final contact = ModalRoute.of(context).settings.arguments as Contact;
+    final contact = ModalRoute.of(context)!.settings.arguments as Contact;
     setState(() {
       _contact = contact;
     });
@@ -30,7 +29,7 @@ class _ContactPageState extends State<ContactPage>
     await _fetchContactWith(highRes: true);
   }
 
-  Future _fetchContactWith({@required bool highRes}) async {
+  Future _fetchContactWith({required bool highRes}) async {
     final contact = await FlutterContacts.getContact(
       _contact.id,
       withThumbnail: !highRes,
@@ -39,7 +38,7 @@ class _ContactPageState extends State<ContactPage>
       withAccounts: true,
     );
     setState(() {
-      _contact = contact;
+      _contact = contact!;
     });
   }
 
@@ -49,18 +48,6 @@ class _ContactPageState extends State<ContactPage>
       appBar: AppBar(
         title: Text(_contact?.displayName ?? ''),
         actions: [
-          IconButton(
-            icon: Icon(Icons.remove_red_eye),
-            onPressed: () async {
-              await showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  content: Text(prettyJson(
-                      _contact.toJson(withPhoto: false, withThumbnail: false))),
-                ),
-              );
-            },
-          ),
           IconButton(
             icon: Icon(Icons.file_present),
             onPressed: () async {
@@ -240,8 +227,7 @@ class _ContactPageState extends State<ContactPage>
               [contact],
               (x) => [
                     Divider(),
-                    Text(prettyJson(
-                        x.toJson(withThumbnail: false, withPhoto: false))),
+                    Text(x.toJson(withThumbnail: false, withPhoto: false)),
                   ]),
         ]),
       ),

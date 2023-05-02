@@ -8,9 +8,9 @@ class EmailForm extends StatefulWidget {
 
   EmailForm(
     this.email, {
-    @required this.onUpdate,
-    @required this.onDelete,
-    Key key,
+    required this.onUpdate,
+    required this.onDelete,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -21,9 +21,9 @@ class _EmailFormState extends State<EmailForm> {
   final _formKey = GlobalKey<FormState>();
   static final _validLabels = EmailLabel.values;
 
-  TextEditingController _addressController;
-  EmailLabel _label;
-  TextEditingController _customLabelController;
+  late TextEditingController _addressController;
+  late EmailLabel _label;
+  late TextEditingController _customLabelController;
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _EmailFormState extends State<EmailForm> {
                 value: _label,
                 onChanged: (label) {
                   setState(() {
-                    _label = label;
+                    _label = label!;
                   });
                   // Unfortunately, the form's `onChanged` gets triggered before
                   // the dropdown's `onChanged`, so it doesn't update the
